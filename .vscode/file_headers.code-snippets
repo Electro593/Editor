@@ -1,0 +1,53 @@
+{
+    "Header File Comment": {
+        "prefix": [
+            "Header File Comment",
+        ],
+        "body": [
+            "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\",
+            " *                                                                         * ",
+            " *  Author: Aria Seiler                                                    * ",
+            " *                                                                         * ",
+            " *  This program is in the public domain. There is no implied warranty,    * ",
+            " *  so use it at your own risk.                                            * ",
+            " *                                                                         * ",
+            "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */",
+            "",
+            "#ifndef ${TM_FILEPATH/.*src[^\\w]|(([\\w]*)([^\\w])?)/${2:/upcase}${3:+_}/g}_",
+            "#define ${TM_FILEPATH/.*src[^\\w]|(([\\w]*)([^\\w])?)/${2:/upcase}${3:+_}/g}_",
+            "",
+            "$0",
+            "",
+            "#endif",
+        ],
+        "description": "Adds a file comment to a .h file",
+    },
+    "Source File Comment": {
+        "prefix": [
+            "Source File Comment",
+        ],
+        "body": [
+            "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\",
+            " *                                                                         * ",
+            " *  Author: Aria Seiler                                                    * ",
+            " *                                                                         * ",
+            " *  This program is in the public domain. There is no implied warranty,    * ",
+            " *  so use it at your own risk.                                            * ",
+            " *                                                                         * ",
+            "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */",
+            "",
+            "$0",
+        ],
+        "description": "Adds a file comment to a .c file",
+    },
+    "Section Label": {
+        "prefix": [
+            "Section Label",
+        ],
+        "body": [
+            "// *",
+            "// * $0",
+            "// *",
+        ]
+    }
+}

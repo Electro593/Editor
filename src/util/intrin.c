@@ -7,16 +7,9 @@
 **                                                                         **
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef INCLUDE_HEADER
-#include <shared.h>
-#endif
+#ifdef INCLUDE_HEADER
 
+u64 __readgsqword(u32 Offset);
+#define Asm_ReadGSQWord(u32__Offset) RETURNS(u64) __readgsqword(u32__Offset)
 
-
-#ifndef INCLUDE_HEADER
-external void
-Base_Load(void)
-{
-    
-}
 #endif

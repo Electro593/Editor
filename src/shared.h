@@ -1,14 +1,11 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
- *                                                                         * 
- *  Author: Aria Seiler                                                    * 
- *                                                                         * 
- *  This program is in the public domain. There is no implied warranty,    * 
- *  so use it at your own risk.                                            * 
- *                                                                         * 
+**                                                                         **
+**  Author: Aria Seiler                                                    **
+**                                                                         **
+**  This program is in the public domain. There is no implied warranty,    **
+**  so use it at your own risk.                                            **
+**                                                                         **
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-#ifndef SHARED_H_
-#define SHARED_H_
 
 // *
 // * Modules
@@ -46,6 +43,8 @@
 #define persistant static
 #define internal inline static
 #define external
+
+#define RETURNS(...)
 
 // *
 // * Typedefs
@@ -100,9 +99,17 @@ TYPES
 #undef TYPES
 
 // *
+// * Includes
+// *
+
+#define INCLUDE_HEADER
+#include <util/module.c>
+#include <base/module.c>
+#include <platform/module.c>
+#undef  INCLUDE_HEADER
+
+// *
 // * Misc
 // *
 
 s32 _fltused;
-
-#endif

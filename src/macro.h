@@ -7,16 +7,25 @@
 **                                                                         **
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef INCLUDE_HEADER
-#include <shared.h>
-#endif
-
-
-
-#ifndef INCLUDE_HEADER
-external void
-Base_Load(void)
-{
+#ifdef X_MACRO
+#   ifndef IPROC
+#       define IPROC(Module, ReturnType, Name, CustomName, ...)
+#   endif
+#   ifndef EPROC
+#       define EPROC(Module, ReturnType, Name, ...)
+#   endif
+#   ifndef IFUNC
+#       define IFUNC(Module, ReturnType, Name, ...)
+#   endif
+#   ifndef EFUNC
+#       define EFUNC(Module, ReturnType, Name, ...)
+#   endif
     
-}
+    X_MACRO
+    
+#   undef IPROC
+#   undef EPROC
+#   undef IFUNC
+#   undef EFUNC
+#   undef X_MACRO
 #endif

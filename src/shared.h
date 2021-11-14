@@ -44,7 +44,22 @@
 #define internal inline static
 #define external
 
+#define FLAG_SET(Value, Flag)   ((Value) |=  (Flag))
+#define FLAG_RESET(Value, Flag) ((Value) &= ~(Flag))
+
+#define UNUSED(...) ((void)__VA_ARGS__)
+
 #define RETURNS(...)
+
+#define NULL  ((vptr)0)
+#define FALSE 0
+#define TRUE  1
+
+#ifdef _DEBUG
+#   define ASSERT(Expression, Message) { if(!(Expression)) { Platform->Assert(__FILE__, __LINE__, Message); Intrin_DebugBreak(); }}
+#else
+#   define ASSERT(...)
+#endif
 
 // *
 // * Typedefs
@@ -64,8 +79,10 @@ typedef float r32;
 typedef double r64;
 
 typedef u08 c08;
+typedef u16 c16;
 
-typedef u08 b08;
+typedef s08 b08;
+typedef s32 b32;
 
 typedef void * vptr;
 typedef void (*fptr)(void);
@@ -80,7 +97,7 @@ typedef void (*fptr)(void);
 typedef enum type_name
 {
     #define ENUM(Name, Size) \
-        TYPE__##Name,
+        Type_##Name,
     TYPES
     #undef ENUM
 } type_name;
@@ -92,7 +109,7 @@ typedef struct type
 } type;
 
 #define ENUM(Name, Size) \
-    global type Name = {TYPE__##Name, Size};
+    global type Name = {Type_##Name, Size};
 TYPES
 #undef ENUM
 
@@ -103,8 +120,11 @@ TYPES
 // *
 
 #define INCLUDE_HEADER
+typedef struct util util;
+typedef struct game game;
+typedef struct platform platform;
 #include <util/module.c>
-#include <base/module.c>
+#include <game/module.c>
 #include <platform/module.c>
 #undef  INCLUDE_HEADER
 

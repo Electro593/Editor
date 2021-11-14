@@ -9,16 +9,16 @@
 
 #ifdef X_MACRO
 #   ifndef IPROC
-#       define IPROC(Module, ReturnType, Name, CustomName, ...)
+#       define IPROC(Module, ReturnType, Name, ...)
 #   endif
 #   ifndef EPROC
-#       define EPROC(Module, ReturnType, Name, ...)
+#       define EPROC(ReturnType, Name, ...)
 #   endif
 #   ifndef IFUNC
-#       define IFUNC(Module, ReturnType, Name, ...)
+#       define IFUNC(ReturnType, Name, ...)
 #   endif
 #   ifndef EFUNC
-#       define EFUNC(Module, ReturnType, Name, ...)
+#       define EFUNC(ReturnType, Name, ...)
 #   endif
     
     X_MACRO

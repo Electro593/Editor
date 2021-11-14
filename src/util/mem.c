@@ -7,16 +7,31 @@
 **                                                                         **
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef INCLUDE_HEADER
-#include <shared.h>
-#endif
+#ifdef INCLUDE_HEADER
+
+#define UTIL__MEM__FUNCS \
+    EFUNC(vptr, Mem_Set, vptr Dest, u08 Data, u64 Size) \
 
 
 
-#ifndef INCLUDE_HEADER
-external void
-Base_Load(void)
+#else
+
+
+
+// - TODO: Use SIMD on this
+internal vptr
+Mem_Set(vptr Dest,
+        u08 Data,
+        u64 Size)
 {
+    u08 *Dest08 = (u08*)Dest;
     
+    while(Size--)
+    {
+        *Dest08++ = Data;
+    }
+    
+    return Dest;
 }
+
 #endif

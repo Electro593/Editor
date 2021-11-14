@@ -11,35 +11,28 @@
 #include <shared.h>
 #endif
 
-
-
-#include <util/intrin.c>
-#include <util/mem.c>
-
-
-
 #ifdef INCLUDE_HEADER
 
 
 
-#define UTIL__FUNCS \
-    UTIL__MEM__FUNCS \
-    EPROC(void, Util_Load, util *OutUtil, platform *InPlatform) \
+#define GAME__FUNCS \
+    EFUNC(void, Game_Init, void) \
+    EPROC(void, Game_Load, game *OutGame, platform *InPlatform, util *InUtil) \
 
 #define EPROC(ReturnType, Name, ...) typedef ReturnType func_##Name(__VA_ARGS__);
 #define EFUNC(ReturnType, Name, ...) typedef ReturnType func_##Name(__VA_ARGS__);
 #define IFUNC(ReturnType, Name, ...) typedef ReturnType func_##Name(__VA_ARGS__);
-#define X_MACRO UTIL__FUNCS
+#define X_MACRO GAME__FUNCS
 #include <macro.h>
 
-struct util
+struct game
 {
     #define EFUNC(ReturnType, Name, ...) \
         func_##Name *Name;
-    #define X_MACRO UTIL__FUNCS
+    #define X_MACRO GAME__FUNCS
     #include <macro.h>
 };
-global util *Util;
+global game *Game;
 
 
 
@@ -47,16 +40,24 @@ global util *Util;
 
 
 
+internal void
+Game_Init(void)
+{
+    
+}
+
 external void
-Util_Load(util *OutUtil,
-          platform *InPlatform)
+Game_Load(game *OutGame,
+          platform *InPlatform,
+          util *InUtil)
 {
     #define EFUNC(ReturnType, Name, ...) \
-        OutUtil->Name = Name;
-    #define X_MACRO UTIL__FUNCS
+        OutGame->Name = Name;
+    #define X_MACRO GAME__FUNCS
     #include <macro.h>
     
     Platform = InPlatform;
+    Util = InUtil;
 }
 
 

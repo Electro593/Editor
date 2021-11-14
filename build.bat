@@ -35,8 +35,8 @@ if %BuildMode%==1 (
 if exist *.pdb del *.pdb > NUL 2> NUL
 echo WAITING FOR PDB > lock.tmp
 
-echo Building Module 'Base'
-cl %CompilerSwitches% /D_MODULE=1 /I ..\src\ ..\src\base\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Base_%random%.pdb /out:Base.dll
+echo Building Module 'Game'
+cl %CompilerSwitches% /D_MODULE=1 /I ..\src\ ..\src\game\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Game_%random%.pdb /out:Game.dll
 
 echo Building Module 'Util'
 cl %CompilerSwitches% /D_MODULE=2 /I ..\src\ ..\src\util\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Util_%random%.pdb /out:Util.dll

@@ -12,4 +12,7 @@
 u64 __readgsqword(u32 Offset);
 #define Asm_ReadGSQWord(u32__Offset) RETURNS(u64) __readgsqword(u32__Offset)
 
+void __debugbreak(void);
+#define Intrin_DebugBreak() RETURNS(void) __debugbreak();
+
 #endif

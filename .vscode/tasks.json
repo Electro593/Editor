@@ -10,6 +10,15 @@
                 "isDefault": true
             },
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Run Program",
+            "type": "shell",
+            "command": "build/Platform.exe",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
         }
     ]
 }

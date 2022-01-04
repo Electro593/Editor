@@ -25,6 +25,7 @@
 
 #if _PLATFORM==0
 // #   define _WIN32
+#   define _API_EXPORT __declspec(dllexport)
 #else
 #   error "Unsupported Platform"
 #endif
@@ -46,6 +47,9 @@
 
 #define FLAG_SET(Value, Flag)   ((Value) |=  (Flag))
 #define FLAG_RESET(Value, Flag) ((Value) &= ~(Flag))
+#define FLAG_TEST(Value, Flag)  ((Value) &   (Flag))
+
+#define FORCE_CAST(Value, Type) (*(Type*)&(Value))
 
 #define UNUSED(...) ((void)__VA_ARGS__)
 
@@ -120,10 +124,8 @@ TYPES
 // *
 
 #define INCLUDE_HEADER
-typedef struct util util;
 typedef struct game game;
 typedef struct platform platform;
-#include <util/module.c>
 #include <game/module.c>
 #include <platform/module.c>
 #undef  INCLUDE_HEADER

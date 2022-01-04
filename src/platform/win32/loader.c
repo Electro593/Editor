@@ -153,48 +153,48 @@ typedef enum scancode
     ScanCode_Convert          = 0x79,
     ScanCode_NonConvert       = 0x7B,
     
-    ScanCode_MediaPrev        = 0xE010,
-    ScanCode_MediaNext        = 0xE019,
-    ScanCode_NumpadEnter      = 0xE01C,
-    ScanCode_ControlRight     = 0xE01D,
-    ScanCode_VolumeMute       = 0xE020,
-    ScanCode_LaunchApp2       = 0xE021,
-    ScanCode_MediaPlay        = 0xE022,
-    ScanCode_MediaStop        = 0xE024,
-    ScanCode_VolumeDown       = 0xE02E,
-    ScanCode_VolumeUp         = 0xE030,
-    ScanCode_BrowserHome      = 0xE032,
-    ScanCode_NumpadDivide     = 0xE035,
-    ScanCode_PrintScreen      = 0xE037,
-    ScanCode_AltRight         = 0xE038,
-    ScanCode_Cancel           = 0xE046,
-    ScanCode_Home             = 0xE047,
-    ScanCode_ArrowUp          = 0xE048,
-    ScanCode_PageUp           = 0xE049,
-    ScanCode_ArrowLeft        = 0xE04B,
-    ScanCode_ArrowRight       = 0xE04D,
-    ScanCode_End              = 0xE04F,
-    ScanCode_ArrowDown        = 0xE050,
-    ScanCode_PageDown         = 0xE051,
-    ScanCode_Insert           = 0xE052,
-    ScanCode_Delete           = 0xE053,
-    ScanCode_MetaLeft         = 0xE05B,
-    ScanCode_MetaRight        = 0xE05C,
-    ScanCode_Application      = 0xE05D,
-    ScanCode_Power            = 0xE05E,
-    ScanCode_Sleep            = 0xE05F,
-    ScanCode_Wake             = 0xE063,
-    ScanCode_BrowserSearch    = 0xE065,
-    ScanCode_BrowserFavorites = 0xE066,
-    ScanCode_BrowserRefresh   = 0xE067,
-    ScanCode_BrowserStop      = 0xE068,
-    ScanCode_BrowserForward   = 0xE069,
-    ScanCode_BrowserBack      = 0xE06A,
-    ScanCode_LaunchApp1       = 0xE06B,
-    ScanCode_LaunchEmail      = 0xE06C,
-    ScanCode_LaunchMedia      = 0xE06D,
+    ScanCode_MediaPrev        = 0x80 | 0x10,
+    ScanCode_MediaNext        = 0x80 | 0x19,
+    ScanCode_NumpadEnter      = 0x80 | 0x1C,
+    ScanCode_ControlRight     = 0x80 | 0x1D,
+    ScanCode_VolumeMute       = 0x80 | 0x20,
+    ScanCode_LaunchApp2       = 0x80 | 0x21,
+    ScanCode_MediaPlay        = 0x80 | 0x22,
+    ScanCode_MediaStop        = 0x80 | 0x24,
+    ScanCode_VolumeDown       = 0x80 | 0x2E,
+    ScanCode_VolumeUp         = 0x80 | 0x30,
+    ScanCode_BrowserHome      = 0x80 | 0x32,
+    ScanCode_NumpadDivide     = 0x80 | 0x35,
+    ScanCode_PrintScreen      = 0x80 | 0x37,
+    ScanCode_AltRight         = 0x80 | 0x38,
+    ScanCode_Cancel           = 0x80 | 0x46,
+    ScanCode_Home             = 0x80 | 0x47,
+    ScanCode_ArrowUp          = 0x80 | 0x48,
+    ScanCode_PageUp           = 0x80 | 0x49,
+    ScanCode_ArrowLeft        = 0x80 | 0x4B,
+    ScanCode_ArrowRight       = 0x80 | 0x4D,
+    ScanCode_End              = 0x80 | 0x4F,
+    ScanCode_ArrowDown        = 0x80 | 0x50,
+    ScanCode_PageDown         = 0x80 | 0x51,
+    ScanCode_Insert           = 0x80 | 0x52,
+    ScanCode_Delete           = 0x80 | 0x53,
+    ScanCode_MetaLeft         = 0x80 | 0x5B,
+    ScanCode_MetaRight        = 0x80 | 0x5C,
+    ScanCode_Application      = 0x80 | 0x5D,
+    ScanCode_Power            = 0x80 | 0x5E,
+    ScanCode_Sleep            = 0x80 | 0x5F,
+    ScanCode_Wake             = 0x80 | 0x63,
+    ScanCode_BrowserSearch    = 0x80 | 0x65,
+    ScanCode_BrowserFavorites = 0x80 | 0x66,
+    ScanCode_BrowserRefresh   = 0x80 | 0x67,
+    ScanCode_BrowserStop      = 0x80 | 0x68,
+    ScanCode_BrowserForward   = 0x80 | 0x69,
+    ScanCode_BrowserBack      = 0x80 | 0x6A,
+    ScanCode_LaunchApp1       = 0x80 | 0x6B,
+    ScanCode_LaunchEmail      = 0x80 | 0x6C,
+    ScanCode_LaunchMedia      = 0x80 | 0x6D,
     
-    ScanCode_Pause            = 0xE11D45,
+    ScanCode_Pause            = 0xFF, //0xE11D45,
 } scancode;
 
 typedef enum keycode
@@ -223,7 +223,8 @@ typedef struct loader_dll
     IFUNC(win32_find_data, GetFileData,           c08 *FileName) \
     IFUNC(void,            LoadGameDLL,           loader_dll *DLL) \
     IFUNC(void,            LoadExternalFunctions, void) \
-    IFUNC(void,            LoadUtilDLL,           loader_dll *DLL) \
+    IFUNC(void,            Main,                  vptr Parameter) \
+    IFUNC(s64,             ServiceWindowCallback, win32_window ServiceWindow, u32 Message, s64 WParam, s64 LParam) \
     IFUNC(s64,             WindowCallback,        win32_window Window, u32 Message, s64 WParam, s64 LParam) \
 
 #define EPROC(ReturnType, Name, ...) typedef ReturnType func_Platform_##Name(__VA_ARGS__);
@@ -236,6 +237,8 @@ struct platform
 {
     execution_state ExecutionState;
     audio_state AudioState;
+    u32 MainThreadID;
+    u08 _Padding0[4];
     
     struct
     {
@@ -271,13 +274,13 @@ Platform_Assert(c08 *File,
         Line /= 10;
     }
     
-    Win32.OutputDebugStringA("\n");
-    Win32.OutputDebugStringA(File);
-    Win32.OutputDebugStringA("(");
-    Win32.OutputDebugStringA(LineStr);
-    Win32.OutputDebugStringA("): ");
-    Win32.OutputDebugStringA(Message);
-    Win32.OutputDebugStringA("\n");
+    Win32->OutputDebugStringA("\n");
+    Win32->OutputDebugStringA(File);
+    Win32->OutputDebugStringA("(");
+    Win32->OutputDebugStringA(LineStr);
+    Win32->OutputDebugStringA("): ");
+    Win32->OutputDebugStringA(Message);
+    Win32->OutputDebugStringA("\n");
 }
 
 internal void
@@ -316,56 +319,102 @@ Platform_LoadExternalFunctions(void)
     
     u16 GetProcAddressOrdinal = ExportOrdinalTable[Index];
     u32 GetProcAddressRVA = ExportAddressTable[GetProcAddressOrdinal];
-    Win32.GetProcAddress = (func_Win32_GetProcAddress*)(DOSHeader + GetProcAddressRVA);
+    Win32->GetProcAddress = (func_Win32_GetProcAddress*)(DOSHeader + GetProcAddressRVA);
     
-    Win32.LoadLibraryA = (func_Win32_LoadLibraryA*)Win32.GetProcAddress(Kernel32, "LoadLibraryA");
-    win32_module User32 = Win32.LoadLibraryA("user32.dll");
+    Win32->LoadLibraryA = (func_Win32_LoadLibraryA*)Win32->GetProcAddress(Kernel32, "LoadLibraryA");
+    win32_module Gdi32 = Win32->LoadLibraryA("gdi32.dll");
+    win32_module DSound = Win32->LoadLibraryA("dsound.dll");
+    win32_module User32 = Win32->LoadLibraryA("user32.dll");
     
     #define IPROC(Module, ReturnType, Name, ...) \
-        Win32.Name = (func_Win32_##Name*)Win32.GetProcAddress(Module, #Name);
+        Win32->Name = (func_Win32_##Name*)Win32->GetProcAddress(Module, #Name);
     #define X_MACRO WIN32__FUNCS
     #include <macro.h>
+}
+
+internal void
+Platform_InitDirectSound(win32_window Window)
+{
+    win32_dsound *DSound;
+    s32 Result = Win32->DirectSoundCreate(NULL, &DSound, NULL);
+    ASSERT(SUCCEEDED(Result), "Failed to create a DSound object");
+    
+    u32 Level = FLAG_TEST(Platform->AudioState, AudioFlag_Exclusive) ? DSSCL_EXCLUSIVE : DSSCL_PRIORITY;
+    Result = DSound->VTable->SetCooperativeLevel(DSound, Window, Level);
+    ASSERT(SUCCEEDED(Result), "Failed to set DSound cooperative level");
+    
+    win32_dsound_buffer_description BufferDescription = {0};
+    BufferDescription.Size = sizeof(win32_dsound_buffer_description);
+    BufferDescription.Flags = DSoundBufferCapabilities_PrimaryBuffer;
+    win32_dsound_buffer *PrimaryBuffer;
+    Result = DSound->VTable->CreateSoundBuffer(DSound, &BufferDescription, &PrimaryBuffer, NULL);
+    ASSERT(SUCCEEDED(Result), "Failed to create DSound primary buffer");
+    
+    win32_wave_format_ex Format = {0};
+    Format.FormatTag = WAVE_FORMAT_PCM;
+    Format.ChannelCount = 2;
+    Format.SamplesPerSecond = 48000;
+    Format.BitsPerSample = 16;
+    Format.BlockAlign = (Format.BitsPerSample*Format.ChannelCount) / 8;
+    Format.AverageBytesPerSecond = Format.BlockAlign*Format.SamplesPerSecond;
+    Format.Size = 0;
+    Result = PrimaryBuffer->VTable->SetFormat(PrimaryBuffer, &Format);
+    ASSERT(SUCCEEDED(Result), "Failed to set the primary buffer's format");
+    
+    BufferDescription.Flags = 0;
+    BufferDescription.BufferBytes = Format.AverageBytesPerSecond;
+    BufferDescription.WaveFormat = &Format;
+    win32_dsound_buffer *SecondaryBuffer;
+    Result = DSound->VTable->CreateSoundBuffer(DSound, &BufferDescription, &SecondaryBuffer, NULL);
+    ASSERT(SUCCEEDED(Result), "Failed to create DSound secondary buffer");
 }
 
 internal win32_find_data
 Platform_GetFileData(c08 *FileName)
 {
     win32_find_data FindData;
-    win32_handle FindHandle = Win32.FindFirstFileA(FileName, &FindData);
+    win32_handle FindHandle = Win32->FindFirstFileA(FileName, &FindData);
     ASSERT(FindHandle != INVALID_HANDLE_VALUE, "Didn't to find file");
-    Win32.FindClose(FindHandle);
+    Win32->FindClose(FindHandle);
     return FindData;
-}
-
-internal void
-Platform_LoadUtilDLL(loader_dll *DLL)
-{
-    if(DLL->DLL)
-        Win32.FreeLibrary(DLL->DLL);
-    
-    Win32.CopyFileA(DLL_PATH(Util), DLL_LOCKED_PATH(Util), FALSE);
-    DLL->DLL = Win32.LoadLibraryA(DLL_LOCKED_PATH(Util));
-    DLL->LastWritten = Platform_GetFileData(DLL_LOCKED_PATH(Util)).LastWriteTime;
-    
-    func_Util_Load *Util_Load = (func_Util_Load*)Win32.GetProcAddress(DLL->DLL, DLL_LOAD_FUNC(Util));
-    Util_Load(Util, Platform);
 }
 
 internal void
 Platform_LoadGameDLL(loader_dll *DLL)
 {
     if(DLL->DLL)
-        Win32.FreeLibrary(DLL->DLL);
+        Win32->FreeLibrary(DLL->DLL);
     
-    Win32.CopyFileA(DLL_PATH(Game), DLL_LOCKED_PATH(Game), FALSE);
-    DLL->DLL = Win32.LoadLibraryA(DLL_LOCKED_PATH(Game));
+    Win32->CopyFileA(DLL_PATH(Game), DLL_LOCKED_PATH(Game), FALSE);
+    DLL->DLL = Win32->LoadLibraryA(DLL_LOCKED_PATH(Game));
     DLL->LastWritten = Platform_GetFileData(DLL_LOCKED_PATH(Game)).LastWriteTime;
     
-    func_Game_Load *Game_Load = (func_Game_Load*)Win32.GetProcAddress(DLL->DLL, DLL_LOAD_FUNC(Game));
-    Game_Load(Game, Platform, Util);
+    func_Game_Load *Game_Load = (func_Game_Load*)Win32->GetProcAddress(DLL->DLL, "Game_Load");//DLL_LOAD_FUNC(Game));
+    Game_Load(Game, Platform);
 }
 
-external s64
+internal s64 __stdcall
+Platform_ServiceWindowCallback(win32_window ServiceWindow,
+                               u32 Message,
+                               s64 WParam,
+                               s64 LParam)
+{
+    if(Message == WM_CREATE_WINDOW)
+    {
+        win32_window_class_a *WindowClass = (win32_window_class_a*)WParam;
+        win32_window Window = Win32->CreateWindowExA(0, WindowClass->ClassName, "Editor",
+                                                     WS_OVERLAPPED|WS_SYSMENU|WS_CAPTION|WS_VISIBLE,
+                                                     CW_USEDEFAULT, CW_USEDEFAULT,
+                                                     CW_USEDEFAULT, CW_USEDEFAULT,
+                                                     NULL, NULL, WindowClass->Instance, NULL);
+        
+        return (s64)Window;
+    }
+    
+    return Win32->DefWindowProcA(ServiceWindow, Message, WParam, LParam);
+}
+
+external s64 __stdcall
 Platform_WindowCallback(win32_window Window,
                         u32 Message,
                         s64 WParam,
@@ -373,137 +422,123 @@ Platform_WindowCallback(win32_window Window,
 {
     switch(Message)
     {
+        case WM_CLOSE:
+        {
+            Win32->PostThreadMessageA(Platform->MainThreadID, Message, (s64)Window, LParam);
+        } return 0;
+        
         case WM_SETFOCUS:
-        {
-            Platform->ExecutionState = Execution_Running;
-            FLAG_SET(Platform->AudioState, AudioFlag_Enabled);
-            Util->Mem_Set(Platform->Input.Keys, 0, sizeof(Platform->Input.Keys));
-        } return 0;
-        
         case WM_KILLFOCUS:
-        {
-            Platform->ExecutionState = Execution_Paused;
-            FLAG_RESET(Platform->AudioState, AudioFlag_Enabled);
-        } return 0;
-        
-        case WM_SYSKEYDOWN:
-        case WM_SYSKEYUP:
-        case WM_KEYDOWN:
         case WM_KEYUP:
+        case WM_KEYDOWN:
+        case WM_SYSKEYUP:
+        case WM_SYSKEYDOWN:
         {
-            u08 ScanCode    = (LParam >> 16) & 0xFF;
-            b08 IsExtended  = (LParam >> 24) & 0x01;
-            b08 WasDown     = (LParam >> 30) & 0x01;
-            b08 IsUp        = (LParam >> 31) & 0x01;
-            
-            key_state KeyState;
-            if(IsUp == TRUE && WasDown == TRUE) KeyState = Key_Released;
-            else if(IsUp == FALSE && WasDown == FALSE) KeyState = Key_Pressed;
-            else KeyState = Key_Repeated;
-            
-            if(IsExtended)
-            {
-                // Exclude NumLock
-                if(ScanCode != 0x45)
-                    ScanCode |= 0x80;
-            }
-            else
-            {
-                // Pause key
-                if(ScanCode == 0x45)
-                    ScanCode = 0xFF;
-                // Alt + PrintScreen
-                else if(ScanCode == 0x54)
-                    ScanCode = 0x80 | 0x37;
-            }
-            
-            Platform->Input.Keys[ScanCode] = KeyState;
+            Win32->PostThreadMessageA(Platform->MainThreadID, Message, WParam, LParam);
         } return 0;
-        
-        case WM_SYSCOMMAND:
-        {
-            switch(WParam & 0xFFF0)
-            {
-                case SC_KEYMENU:
-                {
-                    return 0;
-                } break;
-            }
-        } break;
     }
     
-    return Win32.DefWindowProcA(Window, Message, WParam, LParam);
+    return Win32->DefWindowProcA(Window, Message, WParam, LParam);
 }
 
-external void
-Platform_Entry(void)
+external void __stdcall
+Platform_Main(vptr Parameter)
 {
-    platform P;
-    game G;
-    util U;
-    Platform = &P;
-    Game = &G;
-    Util = &U;
+    win32_window ServiceWindow = (win32_window)Parameter;
     
-    #define EFUNC(ReturnType, Name, ...) \
-        Platform->Name = Platform_##Name;
-    #define X_MACRO PLATFORM__FUNCS
-    #include <macro.h>
-    
-    loader_dll UtilDLL;
     loader_dll GameDLL;
-    Platform_LoadExternalFunctions();
-    Platform_LoadUtilDLL(&UtilDLL);
     Platform_LoadGameDLL(&GameDLL);
     
-    win32_instance Instance = Win32.GetModuleHandleA(NULL);
     win32_window_class_a WindowClass = {0};
     WindowClass.Callback = Platform_WindowCallback;
-    WindowClass.Instance = Instance;
-    WindowClass.ClassName = "Editor";
-    Win32.RegisterClassA(&WindowClass);
+    WindowClass.Instance = Win32->GetModuleHandleA(NULL);
+    WindowClass.Icon = Win32->LoadIconA(NULL, IDI_APPLICATION);
+    WindowClass.Cursor = Win32->LoadCursorA(NULL, IDC_ARROW);
+    WindowClass.Background = (win32_brush)Win32->GetStockObject(BLACK_BRUSH);
+    WindowClass.ClassName = "MainWindow";
+    Win32->RegisterClassA(&WindowClass);
     
-    win32_window Window = Win32.CreateWindowExA(0, "Editor", WindowClass.ClassName,
-                                                WS_OVERLAPPED|WS_SYSMENU|WS_CAPTION|WS_VISIBLE,
-                                                CW_USEDEFAULT, CW_USEDEFAULT,
-                                                CW_USEDEFAULT, CW_USEDEFAULT,
-                                                NULL, NULL, Instance, NULL);
+    win32_window Window = (win32_window)Win32->SendMessageA(ServiceWindow, WM_CREATE_WINDOW,
+                                                            (s64)&WindowClass, 0);
     ASSERT(Window, "Could not create window");
     
-    Platform->ExecutionState = Execution_Running;
     Platform->AudioState = AudioFlag_Enabled|AudioFlag_Exclusive;
+    Platform_InitDirectSound(Window);
     
     while(Platform->ExecutionState != Execution_Stopped)
     {
+        win32_file_time GameDLLWriteTime = Platform_GetFileData(DLL_PATH(Game)).LastWriteTime;
+        if(Win32->CompareFileTime(&GameDLLWriteTime, &GameDLL.LastWritten) > 0)
+        {
+            Platform_LoadGameDLL(&GameDLL);
+        }
+        
         if(Platform->ExecutionState == Execution_Paused)
-            Win32.WaitMessage();
+            Win32->WaitMessage();
         
         win32_message Message;
-        while(Win32.PeekMessageA(&Message, Window, 0, 0, PM_REMOVE))
+        while(Win32->PeekMessageA(&Message, NULL, 0, 0, PM_REMOVE))
         {
-            if(Message.Message == WM_QUIT)
+            switch(Message.Message)
             {
-                Platform->ExecutionState = Execution_Stopped;
-                break;
+                case WM_QUIT:
+                case WM_CLOSE:
+                case WM_DESTROY:
+                {
+                    Platform->ExecutionState = Execution_Stopped;
+                } break;
+                
+                case WM_SETFOCUS:
+                {
+                    Platform->ExecutionState = Execution_Running;
+                    FLAG_SET(Platform->AudioState, AudioFlag_Enabled);
+                    Game->Mem_Set(Platform->Input.Keys, 0, sizeof(Platform->Input.Keys));
+                } break;
+                
+                case WM_KILLFOCUS:
+                {
+                    Platform->ExecutionState = Execution_Paused;
+                    FLAG_RESET(Platform->AudioState, AudioFlag_Enabled);
+                } break;
+                
+                case WM_SYSKEYDOWN:
+                case WM_SYSKEYUP:
+                case WM_KEYDOWN:
+                case WM_KEYUP:
+                {
+                    u08 ScanCode    = (Message.LParam >> 16) & 0xFF;
+                    b08 IsExtended  = (Message.LParam >> 24) & 0x01;
+                    b08 WasDown     = (Message.LParam >> 30) & 0x01;
+                    b08 IsUp        = (Message.LParam >> 31) & 0x01;
+                    
+                    key_state KeyState;
+                    if(IsUp == TRUE && WasDown == TRUE) KeyState = Key_Released;
+                    else if(IsUp == FALSE && WasDown == FALSE) KeyState = Key_Pressed;
+                    else KeyState = Key_Repeated;
+                    
+                    if(IsExtended)
+                    {
+                        // Exclude NumLock
+                        if(ScanCode != 0x45)
+                            ScanCode |= 0x80;
+                    }
+                    else
+                    {
+                        // Pause key
+                        if(ScanCode == 0x45)
+                            ScanCode = 0xFF;
+                        // Alt + PrintScreen
+                        else if(ScanCode == 0x54)
+                            ScanCode = 0x80 | 0x37;
+                    }
+                    
+                    Platform->Input.Keys[ScanCode] = KeyState;
+                } break;
             }
-            
-            Win32.TranslateMessage(&Message);
-            Win32.DispatchMessageA(&Message);
         }
         
         if(Platform->ExecutionState == Execution_Running)
         {
-            win32_file_time GameDLLWriteTime = Platform_GetFileData(DLL_PATH(Game)).LastWriteTime;
-            win32_file_time UtilDLLWriteTime = Platform_GetFileData(DLL_PATH(Util)).LastWriteTime;
-            if(Win32.CompareFileTime(&GameDLLWriteTime, &GameDLL.LastWritten) > 0)
-            {
-                Platform_LoadGameDLL(&GameDLL);
-            }
-            if(Win32.CompareFileTime(&UtilDLLWriteTime, &UtilDLL.LastWritten) > 0)
-            {
-                Platform_LoadUtilDLL(&UtilDLL);
-            }
-            
             if((Platform->Input.Keys[ScanCode_AltLeft]  == Key_Pressed ||
                 Platform->Input.Keys[ScanCode_AltRight] == Key_Pressed) &&
                Platform->Input.Keys[ScanCode_F4] == Key_Pressed)
@@ -514,7 +549,46 @@ Platform_Entry(void)
         }
     }
     
-    Win32.ExitProcess(0);
+    Win32->ExitProcess(0);
+}
+
+external void __stdcall
+Platform_Entry(void)
+{
+    platform P;
+    game G;
+    win32 W;
+    Platform = &P;
+    Game = &G;
+    Win32 = &W;
+    
+    #define EFUNC(ReturnType, Name, ...) \
+        Platform->Name = Platform_##Name;
+    #define X_MACRO PLATFORM__FUNCS
+    #include <macro.h>
+    
+    Platform_LoadExternalFunctions();
+    
+    win32_window_class_a WindowClass = {0};
+    WindowClass.Callback = Platform_ServiceWindowCallback;
+    WindowClass.Instance = Win32->GetModuleHandleA(NULL);
+    WindowClass.ClassName = "ServiceWindow";
+    Win32->RegisterClassA(&WindowClass);
+    
+    win32_window ServiceWindow = Win32->CreateWindowExA(0, WindowClass.ClassName, "ServiceWindow", 0,
+                                                        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+                                                        NULL, NULL, WindowClass.Instance, NULL);
+    
+    Platform->ExecutionState = Execution_Running;
+    Win32->CreateThread(NULL, 0, (win32_thread_callback*)Platform_Main, ServiceWindow, 0, &Platform->MainThreadID);
+    
+    while(Platform->ExecutionState != Execution_Stopped)
+    {
+        win32_message Message;
+        Win32->GetMessageA(&Message, NULL, 0, 0);
+        Win32->TranslateMessage(&Message);
+        Win32->DispatchMessageA(&Message);
+    }
 }
 
 

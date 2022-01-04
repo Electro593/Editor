@@ -1,6 +1,9 @@
 {
     "files.associations": {
-        "winuser.h": "c"
+        "winuser.h": "c",
+        "dsound.h": "c",
+        "*.rh": "c",
+        "windows.h": "c"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "C_Cpp.errorSquiggles": "Disabled"

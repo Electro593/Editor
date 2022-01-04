@@ -11,13 +11,21 @@
 #include <shared.h>
 #endif
 
+
+
+#include <game/util/intrin.c>
+#include <game/util/mem.c>
+
+
+
 #ifdef INCLUDE_HEADER
 
 
 
 #define GAME__FUNCS \
+    UTIL__MEM__FUNCS \
     EFUNC(void, Game_Init, void) \
-    EPROC(void, Game_Load, game *OutGame, platform *InPlatform, util *InUtil) \
+    EPROC(void, Game_Load, game *OutGame, platform *InPlatform) \
 
 #define EPROC(ReturnType, Name, ...) typedef ReturnType func_##Name(__VA_ARGS__);
 #define EFUNC(ReturnType, Name, ...) typedef ReturnType func_##Name(__VA_ARGS__);
@@ -46,10 +54,9 @@ Game_Init(void)
     
 }
 
-external void
+external _API_EXPORT void
 Game_Load(game *OutGame,
-          platform *InPlatform,
-          util *InUtil)
+          platform *InPlatform)
 {
     #define EFUNC(ReturnType, Name, ...) \
         OutGame->Name = Name;
@@ -57,7 +64,6 @@ Game_Load(game *OutGame,
     #include <macro.h>
     
     Platform = InPlatform;
-    Util = InUtil;
 }
 
 

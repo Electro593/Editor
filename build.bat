@@ -20,7 +20,7 @@ if %Architecture%==0 set arch=x64
 if %Platform%==0 set os=win
 
 set CompilerSwitches=%CompilerSwitches% /nologo /std:c17 /fp:fast /EHa- /FAs /FC /GF /GR- /GS- /Gs0x100000 /J /WX /Wall /X
-set CompilerSwitches=%CompilerSwitches%
+set CompilerSwitches=%CompilerSwitches% /wd5045
 set CompilerSwitches=%CompilerSwitches% /D_BUILD_MODE=%BuildMode% /D_COMPILER=%Compiler% /D_PLATFORM=%Platform% /D_ARCHITECTURE=%Architecture%
 set LinkerSwitches=%LinkerSwitches% /wx /incremental:no /opt:ref /opt:icf /nodefaultlib /subsystem:windows /stack:0x100000,0x100000 /machine:%arch%
 set DLLSwitches=%DLLSwitches% /noimplib /noentry
@@ -36,10 +36,7 @@ if exist *.pdb del *.pdb > NUL 2> NUL
 echo WAITING FOR PDB > lock.tmp
 
 echo Building Module 'Game'
-cl %CompilerSwitches% /D_MODULE=1 /I ..\src\ ..\src\game\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Game_%random%.pdb /out:Game.dll
-
-echo Building Module 'Util'
-cl %CompilerSwitches% /D_MODULE=2 /I ..\src\ ..\src\util\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Util_%random%.pdb /out:Util.dll
+cl %CompilerSwitches% /D_MODULE=1 /I ..\src\ ..\src\game\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Game_%random%.pdb /out:Game.dll /map
 
 del lock.tmp
 echo Building Module 'Platform'

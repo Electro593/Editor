@@ -1,5 +1,5 @@
 @echo off
-call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+call "D:\Programs\VisualStudio\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
 
 if not exist build mkdir build
 pushd build
@@ -35,8 +35,8 @@ if %BuildMode%==1 (
 if exist *.pdb del *.pdb > NUL 2> NUL
 echo WAITING FOR PDB > lock.tmp
 
-echo Building Module 'Game'
-cl %CompilerSwitches% /D_MODULE=1 /I ..\src\ ..\src\game\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Game_%random%.pdb /out:Game.dll /map
+echo Building Module 'Base'
+cl %CompilerSwitches% /D_MODULE=1 /I ..\src\ ..\src\base\module.c /LD /link %LinkerSwitches% %DLLSwitches% /pdb:Base_%random%.pdb /out:Base.dll /map
 
 del lock.tmp
 echo Building Module 'Platform'

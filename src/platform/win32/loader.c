@@ -221,7 +221,7 @@ typedef struct loader_dll
     EFUNC(void,            Assert,                c08 *File, u32 Line, c08 *Message) \
     EPROC(void,            Entry,                 void) \
     IFUNC(win32_find_data, GetFileData,           c08 *FileName) \
-    IFUNC(void,            LoadGameDLL,           loader_dll *DLL) \
+    IFUNC(void,            LoadBaseDLL,           loader_dll *DLL) \
     IFUNC(void,            LoadExternalFunctions, void) \
     IFUNC(void,            Main,                  vptr Parameter) \
     IFUNC(s64,             ServiceWindowCallback, win32_window ServiceWindow, u32 Message, s64 WParam, s64 LParam) \
@@ -380,17 +380,17 @@ Platform_GetFileData(c08 *FileName)
 }
 
 internal void
-Platform_LoadGameDLL(loader_dll *DLL)
+Platform_LoadBaseDLL(loader_dll *DLL)
 {
     if(DLL->DLL)
         Win32->FreeLibrary(DLL->DLL);
     
-    Win32->CopyFileA(DLL_PATH(Game), DLL_LOCKED_PATH(Game), FALSE);
-    DLL->DLL = Win32->LoadLibraryA(DLL_LOCKED_PATH(Game));
-    DLL->LastWritten = Platform_GetFileData(DLL_LOCKED_PATH(Game)).LastWriteTime;
+    Win32->CopyFileA(DLL_PATH(Base), DLL_LOCKED_PATH(Base), FALSE);
+    DLL->DLL = Win32->LoadLibraryA(DLL_LOCKED_PATH(Base));
+    DLL->LastWritten = Platform_GetFileData(DLL_LOCKED_PATH(Base)).LastWriteTime;
     
-    func_Game_Load *Game_Load = (func_Game_Load*)Win32->GetProcAddress(DLL->DLL, "Game_Load");//DLL_LOAD_FUNC(Game));
-    Game_Load(Game, Platform);
+    func_Base_Load *Base_Load = (func_Base_Load*)Win32->GetProcAddress(DLL->DLL, "Base_Load");//DLL_LOAD_FUNC(Base));
+    Base_Load(Base, Platform);
 }
 
 internal s64 __stdcall
@@ -446,8 +446,8 @@ Platform_Main(vptr Parameter)
 {
     win32_window ServiceWindow = (win32_window)Parameter;
     
-    loader_dll GameDLL;
-    Platform_LoadGameDLL(&GameDLL);
+    loader_dll BaseDLL;
+    Platform_LoadBaseDLL(&BaseDLL);
     
     win32_window_class_a WindowClass = {0};
     WindowClass.Callback = Platform_WindowCallback;
@@ -467,10 +467,10 @@ Platform_Main(vptr Parameter)
     
     while(Platform->ExecutionState != Execution_Stopped)
     {
-        win32_file_time GameDLLWriteTime = Platform_GetFileData(DLL_PATH(Game)).LastWriteTime;
-        if(Win32->CompareFileTime(&GameDLLWriteTime, &GameDLL.LastWritten) > 0)
+        win32_file_time BaseDLLWriteTime = Platform_GetFileData(DLL_PATH(Base)).LastWriteTime;
+        if(Win32->CompareFileTime(&BaseDLLWriteTime, &BaseDLL.LastWritten) > 0)
         {
-            Platform_LoadGameDLL(&GameDLL);
+            Platform_LoadBaseDLL(&BaseDLL);
         }
         
         if(Platform->ExecutionState == Execution_Paused)
@@ -492,7 +492,7 @@ Platform_Main(vptr Parameter)
                 {
                     Platform->ExecutionState = Execution_Running;
                     FLAG_SET(Platform->AudioState, AudioFlag_Enabled);
-                    Game->Mem_Set(Platform->Input.Keys, 0, sizeof(Platform->Input.Keys));
+                    Base->Mem_Set(Platform->Input.Keys, 0, sizeof(Platform->Input.Keys));
                 } break;
                 
                 case WM_KILLFOCUS:
@@ -556,10 +556,10 @@ external void __stdcall
 Platform_Entry(void)
 {
     platform P;
-    game G;
+    base G;
     win32 W;
     Platform = &P;
-    Game = &G;
+    Base = &G;
     Win32 = &W;
     
     #define EFUNC(ReturnType, Name, ...) \

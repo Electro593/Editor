@@ -124,9 +124,9 @@ TYPES
 // *
 
 #define INCLUDE_HEADER
-typedef struct game game;
+typedef struct base base;
 typedef struct platform platform;
-#include <game/module.c>
+#include <base/module.c>
 #include <platform/module.c>
 #undef  INCLUDE_HEADER
 

@@ -74,7 +74,7 @@ typedef struct win32_message {
 typedef struct win32_ldr_data_table_entry
 {
     u08 _Padding0[48];
-    vptr DLLGame;
+    vptr DLLBase;
 } win32_ldr_data_table_entry;
 
 typedef struct win32_list_entry

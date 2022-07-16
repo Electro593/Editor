@@ -7,25 +7,12 @@
 **                                                                         **
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifdef X_MACRO
-#   ifndef IPROC
-#       define IPROC(...)
-#   endif
-#   ifndef EPROC
-#       define EPROC(...)
-#   endif
-#   ifndef IFUNC
-#       define IFUNC(...)
-#   endif
-#   ifndef EFUNC
-#       define EFUNC(...)
-#   endif
-    
-    X_MACRO
-    
-#   undef IPROC
-#   undef EPROC
-#   undef IFUNC
-#   undef EFUNC
-#   undef X_MACRO
+#ifdef INCLUDE_HEADER
+
+u64 __readgsqword(u32 Offset);
+#define Asm_ReadGSQWord(u32__Offset) RETURNS(u64) __readgsqword(u32__Offset)
+
+void __debugbreak(void);
+#define Intrin_DebugBreak() RETURNS(void) __debugbreak();
+
 #endif

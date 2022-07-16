@@ -7,25 +7,31 @@
 **                                                                         **
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifdef X_MACRO
-#   ifndef IPROC
-#       define IPROC(...)
-#   endif
-#   ifndef EPROC
-#       define EPROC(...)
-#   endif
-#   ifndef IFUNC
-#       define IFUNC(...)
-#   endif
-#   ifndef EFUNC
-#       define EFUNC(...)
-#   endif
+#ifdef INCLUDE_HEADER
+
+#define UTIL__MEM__FUNCS \
+    EFUNC(vptr, Mem_Set, vptr Dest, u08 Data, u64 Size) \
+
+
+
+#else
+
+
+
+// - TODO: Use SIMD on this
+internal vptr
+Mem_Set(vptr Dest,
+        u08 Data,
+        u64 Size)
+{
+    u08 *Dest08 = (u08*)Dest;
     
-    X_MACRO
+    while(Size--)
+    {
+        *Dest08++ = Data;
+    }
     
-#   undef IPROC
-#   undef EPROC
-#   undef IFUNC
-#   undef EFUNC
-#   undef X_MACRO
+    return Dest;
+}
+
 #endif

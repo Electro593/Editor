@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build Program",
+            "label": "Build Program (MS)",
             "type": "shell",
             "command": "./build",
             "group": {
@@ -12,7 +12,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Run Program",
+            "label": "Run Program (MS)",
             "type": "shell",
             "command": "build/Platform.exe",
             "group": {
